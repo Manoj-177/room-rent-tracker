@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
@@ -6,44 +7,45 @@
 
 <style>
 
-*{
+body{
     margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial,sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
+    background:linear-gradient(135deg,#667eea,#764ba2);
 }
 
-body{
-    background:linear-gradient(135deg,#667eea,#764ba2);
-    min-height:100vh;
-    padding:30px;
+.container{
+    width:90%;
+    max-width:1200px;
+    margin:30px auto;
 }
 
 h1{
     text-align:center;
-    color:white;
-    margin-bottom:40px;
+    color:#333;
+    margin-bottom:30px;
 }
 
 .dashboard{
-    display:flex;
-    justify-content:center;
-    flex-wrap:wrap;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
     gap:20px;
 }
 
+.card-link{
+    text-decoration:none;
+}
+
 .card{
-    background:white;
-    width:250px;
-    padding:25px;
-    border-radius:15px;
+    background:#fff;
+    border:1px solid #ddd;
+    border-radius:8px;
+    padding:20px;
     text-align:center;
-    box-shadow:0 8px 20px rgba(0,0,0,0.2);
-    transition:0.3s;
 }
 
 .card:hover{
-    transform:translateY(-8px);
+    box-shadow:0 2px 8px rgba(0,0,0,0.1);
+    cursor:pointer;
 }
 
 .card h3{
@@ -52,44 +54,41 @@ h1{
 }
 
 .card h2{
-    color:#764ba2;
-    font-size:35px;
+    color:#007bff;
+    margin:0;
 }
 
 .actions{
     text-align:center;
-    margin-top:40px;
+    margin-top:30px;
 }
 
 .btn{
     display:inline-block;
-    padding:12px 25px;
-    margin:10px;
-    background:white;
-    color:#764ba2;
+    padding:10px 20px;
+    margin:5px;
     text-decoration:none;
-    border-radius:8px;
-    font-weight:bold;
-    transition:0.3s;
+    background:#007bff;
+    color:white;
+    border-radius:5px;
 }
 
 .btn:hover{
-    background:#f0f0f0;
+    background:#0056b3;
 }
 
 .logout-btn{
-    margin-top:20px;
-    padding:12px 25px;
-    border:none;
-    border-radius:8px;
-    background:#ff4d4d;
+    margin-top:15px;
+    padding:10px 20px;
+    background:#dc3545;
     color:white;
-    font-size:15px;
+    border:none;
+    border-radius:5px;
     cursor:pointer;
 }
 
 .logout-btn:hover{
-    background:#e60000;
+    background:#c82333;
 }
 
 </style>
@@ -97,40 +96,56 @@ h1{
 </head>
 <body>
 
-<h1>🏠 Room Rent Tracker Dashboard</h1>
+<div class="container">
+
+
+<h1>Room Rent Tracker Dashboard</h1>
 
 <div class="dashboard">
 
-    <div class="card">
-        <h3>Total Tenants</h3>
-        <h2 th:text="${totalTenants}"></h2>
-    </div>
+    <a href="/tenants" class="card-link">
+        <div class="card">
+            <h3>Total Tenants</h3>
+            <h2 th:text="${totalTenants}">0</h2>
+        </div>
+    </a>
 
-    <div class="card">
-        <h3>Paid Tenants</h3>
-        <h2 th:text="${paidTenants}"></h2>
-    </div>
+    <a href="/tenants/paid" class="card-link">
+        <div class="card">
+            <h3>Paid Tenants</h3>
+            <h2 th:text="${paidTenants}">0</h2>
+        </div>
+    </a>
 
-    <div class="card">
-        <h3>Unpaid Tenants</h3>
-        <h2 th:text="${unpaidTenants}"></h2>
-    </div>
+    <a href="/tenants/unpaid" class="card-link">
+        <div class="card">
+            <h3>Unpaid Tenants</h3>
+            <h2 th:text="${unpaidTenants}">0</h2>
+        </div>
+    </a>
 
+    <a href="/tenants/overdue" class="card-link">
     <div class="card">
         <h3>Overdue Tenants</h3>
-        <h2 th:text="${overdueTenants}"></h2>
+        <h2 th:text="${overdueTenants}">0</h2>
     </div>
-
+    </a>
+    <a href="/tenant-history" class="card-link">
+    <div class="card">
+        <h3>History</h3>
+        <h2>📜</h2>
+    </div>
+    </a>
 </div>
 
 <div class="actions">
 
     <a href="/add-tenant" class="btn">
-        ➕ Add Tenant
+        Add Tenant
     </a>
 
     <a href="/tenants" class="btn">
-        📋 View Tenants
+        View Tenants
     </a>
 
     <form th:action="@{/logout}" method="post">
@@ -140,6 +155,9 @@ h1{
         </button>
 
     </form>
+
+</div>
+
 
 </div>
 

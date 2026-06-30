@@ -14,42 +14,43 @@ import com.roomrent.roomrenttracker.service.TenantService;
 @Controller
 public class DashboardController {
 
-@Autowired
-private TenantService tenantService;
+    @Autowired
+    private TenantService tenantService;
 
-@Autowired
-private UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-@GetMapping("/dashboard")
-public String dashboard(Model model) {
+    @GetMapping("/dashboard")
+    public String dashboard(Model model) {
 
-    Authentication auth =
-            SecurityContextHolder.getContext().getAuthentication();
+        Authentication auth =
+                SecurityContextHolder.getContext().getAuthentication();
 
-    String username = auth.getName();
+        String username = auth.getName();
 
-    User user = userRepository
-            .findByUsername(username)
-            .orElseThrow();
+        User user = userRepository
+                .findByUsername(username)
+                .orElseThrow();
 
-    model.addAttribute(
-            "totalTenants",
-            tenantService.getTotalTenants(user));
+        // Automatically convert expired Paid tenants to Unpaid
+        tenantService.updateExpiredTenants(user);
 
-    model.addAttribute(
-            "paidTenants",
-            tenantService.getPaidTenants(user));
+        model.addAttribute(
+                "totalTenants",
+                tenantService.getTotalTenants(user));
 
-    model.addAttribute(
-            "unpaidTenants",
-            tenantService.getUnpaidTenants(user));
+        model.addAttribute(
+                "paidTenants",
+                tenantService.getPaidTenants(user));
 
-    model.addAttribute(
-            "overdueTenants",
-            tenantService.getOverdueTenants(user));
+        model.addAttribute(
+                "unpaidTenants",
+                tenantService.getUnpaidTenants(user));
 
-    return "dashboard";
-}
+        model.addAttribute(
+                "overdueTenants",
+                tenantService.getOverdueTenants(user));
 
-
+        return "dashboard";
+    }
 }

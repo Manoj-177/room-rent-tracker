@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.roomrent.roomrenttracker.entity.Tenant;
 import com.roomrent.roomrenttracker.entity.User;
+import com.roomrent.roomrenttracker.repository.TenantHistoryRepository;
 import com.roomrent.roomrenttracker.repository.UserRepository;
 import com.roomrent.roomrenttracker.service.TenantService;
 
@@ -22,6 +23,9 @@ private TenantService tenantService;
 
 @Autowired
 private UserRepository userRepository;
+
+@Autowired
+private TenantHistoryRepository tenantHistoryRepository;
 
 @GetMapping("/tenants")
 public String viewTenants(Model model) {
@@ -108,5 +112,77 @@ public String deleteTenant(@PathVariable Long id) {
 
     return "redirect:/tenants";
 }
+@GetMapping("/tenants/paid")
+public String viewPaidTenants(Model model) {
 
+    Authentication auth =
+            SecurityContextHolder.getContext().getAuthentication();
+
+    User user = userRepository
+            .findByUsername(auth.getName())
+            .orElseThrow();
+
+    model.addAttribute(
+            "tenants",
+            tenantService.getPaidTenantsByUser(user));
+
+    model.addAttribute("filterTitle", "Paid Tenants");
+
+    return "tenants";
+}
+
+@GetMapping("/tenants/unpaid")
+public String viewUnpaidTenants(Model model) {
+
+    Authentication auth =
+            SecurityContextHolder.getContext().getAuthentication();
+
+    User user = userRepository
+            .findByUsername(auth.getName())
+            .orElseThrow();
+
+    model.addAttribute(
+            "tenants",
+            tenantService.getUnpaidTenantsByUser(user));
+
+    model.addAttribute("filterTitle", "Unpaid Tenants");
+
+    return "tenants";
+}
+@GetMapping("/tenants/overdue")
+public String viewOverdueTenants(Model model) {
+
+    Authentication auth =
+            SecurityContextHolder.getContext().getAuthentication();
+
+    User user = userRepository
+            .findByUsername(auth.getName())
+            .orElseThrow();
+
+    model.addAttribute(
+            "tenants",
+            tenantService.getOverdueTenantsByUser(user));
+
+    model.addAttribute("filterTitle", "Overdue Tenants");
+
+    return "tenants";
+}
+@GetMapping("/tenant-history")
+public String viewHistory(Model model) {
+
+    Authentication auth =
+            SecurityContextHolder.getContext()
+                    .getAuthentication();
+
+    User user =
+            userRepository
+                    .findByUsername(auth.getName())
+                    .orElseThrow();
+
+    model.addAttribute(
+            "history",
+            tenantHistoryRepository.findByUser(user));
+
+    return "tenant-history";
+}
 }

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Tenant History</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:linear-gradient(135deg,#667eea,#764ba2);
+    min-height:100vh;
+    padding:30px;
+}
+
+.container{
+    max-width:1100px;
+    margin:auto;
+    background:white;
+    padding:30px;
+    border-radius:15px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.2);
+}
+
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.header h2{
+    color:#333;
+}
+
+.dashboard-btn{
+    text-decoration:none;
+    background:#764ba2;
+    color:white;
+    padding:10px 18px;
+    border-radius:8px;
+    font-weight:bold;
+    transition:0.3s;
+}
+
+.dashboard-btn:hover{
+    background:#5c3a96;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    overflow:hidden;
+    border-radius:10px;
+}
+
+thead{
+    background:#764ba2;
+    color:white;
+}
+
+th,
+td{
+    padding:14px;
+    text-align:center;
+    border-bottom:1px solid #ddd;
+}
+
+tbody tr:nth-child(even){
+    background:#f8f8f8;
+}
+
+tbody tr:hover{
+    background:#ece8ff;
+    transition:0.3s;
+}
+
+.empty-message{
+    text-align:center;
+    margin-top:20px;
+    color:#666;
+    font-size:18px;
+}
+
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h2>📜 Tenant History</h2>
+
+        <a href="/dashboard"
+           class="dashboard-btn">
+            Dashboard
+        </a>
+    </div>
+
+    <table th:if="${not #lists.isEmpty(history)}">
+
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Room Number</th>
+                <th>Deleted Date</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr th:each="tenant : ${history}">
+                <td th:text="${tenant.name}"></td>
+                <td th:text="${tenant.phone}"></td>
+                <td th:text="${tenant.email}"></td>
+                <td th:text="${tenant.roomNumber}"></td>
+                <td th:text="${tenant.deletedDate}"></td>
+            </tr>
+        </tbody>
+
+    </table>
+
+    <div class="empty-message"
+         th:if="${#lists.isEmpty(history)}">
+        No tenant history available.
+    </div>
+
+</div>
+
+</body>
+</html>
